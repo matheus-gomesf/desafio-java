@@ -1,10 +1,7 @@
 package com.br.productservice.dto;
 
 import com.br.productservice.enums.ProductCategory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -13,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ProductDTO {
     private UUID id;
 

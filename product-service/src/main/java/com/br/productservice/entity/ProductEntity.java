@@ -2,10 +2,7 @@ package com.br.productservice.entity;
 
 import com.br.productservice.enums.ProductCategory;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "products")
 public class ProductEntity {
 
