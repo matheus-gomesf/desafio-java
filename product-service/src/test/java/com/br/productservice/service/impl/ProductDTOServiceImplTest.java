@@ -139,4 +139,32 @@ public class ProductDTOServiceImplTest {
         assertNotNull(e);
         assertEquals(e.getMessage(), format("Product not found with id : '%s'", productId));
     }
+
+    @Test
+    void successfullyDeleteProduct() {
+
+        when(productRepository.findById(productEntityBebida.getId())).thenReturn(Optional.of(productEntityBebida));
+
+        productService.deleteProducts(productEntityBebida.getId());
+    }
+
+    @Test
+    void errorDeleteProductWithNullId() {
+
+        final ParameterNotValidException e = assertThrows(ParameterNotValidException.class, () -> productService.deleteProducts(null));
+
+        assertNotNull(e);
+        assertEquals(e.getMessage(), "ProductId can not be 'null'");
+    }
+
+    @Test
+    void errorDeleteProductNotFound() {
+
+        UUID productId = UUID.randomUUID();
+
+        final ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, () -> productService.deleteProducts(productId));
+
+        assertNotNull(e);
+        assertEquals(e.getMessage(), format("Product not found with id : '%s'", productId));
+    }
 }
