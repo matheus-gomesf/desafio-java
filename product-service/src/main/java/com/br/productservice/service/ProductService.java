@@ -10,6 +10,9 @@ public interface ProductService {
     ProductDTO createProduct(ProductDTO product);
     ProductDTO updateProduct(ProductDTO product);
     List<ProductDTO> listProducts();
+
+    ProductDTO getProductById(UUID productId);
+
     void deleteProducts(UUID productId);
 
 }
