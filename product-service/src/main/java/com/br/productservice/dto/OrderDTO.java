@@ -14,7 +14,7 @@ import java.util.UUID;
 public class OrderDTO {
     private UUID id;
 
-    private List<UUID> products;
+    private List<ProductDTO> products;
 
     private BigInteger totalPrice;
 }

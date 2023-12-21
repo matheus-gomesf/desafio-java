@@ -10,6 +10,7 @@ public interface ProductService {
     ProductDTO createProduct(ProductDTO productDTO);
     ProductDTO updateProduct(UUID productId, ProductDTO productDTO);
     List<ProductDTO> listProducts();
+    List<ProductDTO> findAllByIds(List<UUID> productsIds);
 
     ProductDTO findProductById(UUID productId);
 

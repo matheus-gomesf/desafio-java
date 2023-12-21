@@ -50,6 +50,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> findAllByIds(List<UUID> productsIds) {
+
+        List<ProductEntity> productEntities = productsIds.stream().map(this::getProduct).toList();
+
+        return productEntities.stream().map(PRODUCT_MAPPER::entityToDto).toList();
+    }
+
+    @Override
     public ProductDTO findProductById(UUID productId) {
 
         validateProductId(productId);

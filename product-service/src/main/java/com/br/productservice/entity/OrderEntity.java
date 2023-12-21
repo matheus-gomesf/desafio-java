@@ -20,7 +20,8 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private List<UUID> products;
+    @ManyToMany
+    private List<ProductEntity> products;
 
     private BigInteger totalPrice;
 }

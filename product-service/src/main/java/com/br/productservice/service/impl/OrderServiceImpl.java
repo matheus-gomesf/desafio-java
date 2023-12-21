@@ -1,20 +1,26 @@
 package com.br.productservice.service.impl;
 
 import com.br.productservice.dto.OrderDTO;
+import com.br.productservice.dto.ProductDTO;
 import com.br.productservice.entity.OrderEntity;
+import com.br.productservice.entity.ProductEntity;
 import com.br.productservice.exception.ParameterNotValidException;
 import com.br.productservice.exception.ResourceNotFoundException;
 import com.br.productservice.repository.OrderRepository;
 import com.br.productservice.service.OrderService;
+import com.br.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.br.productservice.mapper.OrderMapper.ORDER_MAPPER;
+import static com.br.productservice.mapper.ProductMapper.PRODUCT_MAPPER;
 
 
 @Service
@@ -22,10 +28,21 @@ import static com.br.productservice.mapper.OrderMapper.ORDER_MAPPER;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ProductService productService;
 
     @Override
-    public OrderDTO createOrder(OrderDTO productDTO) {
-        val toSave = ORDER_MAPPER.dtoToEntity(productDTO);
+    public OrderDTO createOrder(OrderDTO orderDTO) {
+        val toSave = ORDER_MAPPER.dtoToEntity(orderDTO);
+        toSave.getProducts().clear();
+
+        List<UUID> productsIds = orderDTO.getProducts().stream().map(ProductDTO::getId).toList();
+
+        List<ProductEntity> products = productService.findAllByIds(productsIds).stream().map(PRODUCT_MAPPER::dtoToEntity).toList();
+
+        Optional<BigInteger> totalPrice = products.stream().map(ProductEntity::getPrice).reduce(BigInteger::add);
+
+        toSave.getProducts().addAll(products);
+        toSave.setTotalPrice(totalPrice.get());
 
         val saved = orderRepository.save(toSave);
 
@@ -33,13 +50,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO updateOrder(UUID productId, OrderDTO productDTO) {
+    public OrderDTO updateOrder(UUID orderId, OrderDTO orderDTO) {
 
-        validateOrderId(productId);
+        validateOrderId(orderId);
 
-        OrderEntity productEntity = getOrder(productId);
+        OrderEntity productEntity = getOrder(orderId);
 
-        ORDER_MAPPER.updateFromDto(productDTO, productEntity);
+        ORDER_MAPPER.updateFromDto(orderDTO, productEntity);
         OrderEntity saved = orderRepository.save(productEntity);
 
         return ORDER_MAPPER.entityToDto(saved);
@@ -51,32 +68,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO findOrderById(UUID productId) {
+    public OrderDTO findOrderById(UUID orderId) {
 
-        validateOrderId(productId);
+        validateOrderId(orderId);
 
-        OrderEntity productEntity = getOrder(productId);
+        OrderEntity productEntity = getOrder(orderId);
 
         return ORDER_MAPPER.entityToDto(productEntity);
     }
 
     @Override
-    public void deleteOrders(UUID productId) {
+    public void deleteOrders(UUID orderId) {
 
-        validateOrderId(productId);
+        validateOrderId(orderId);
 
-        getOrder(productId);
+        getOrder(orderId);
 
-        orderRepository.deleteById(productId);
+        orderRepository.deleteById(orderId);
     }
 
-    private OrderEntity getOrder(UUID productId) {
-        return orderRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", productId.toString()));
+    private OrderEntity getOrder(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId.toString()));
     }
 
 
-    private void validateOrderId(UUID productId) {
-        if (Objects.isNull(productId)) {
+    private void validateOrderId(UUID orderId) {
+        if (Objects.isNull(orderId)) {
             throw new ParameterNotValidException("OrderId", "null");
         }
     }
