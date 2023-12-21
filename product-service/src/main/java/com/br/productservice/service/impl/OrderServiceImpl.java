@@ -14,10 +14,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.br.productservice.mapper.OrderMapper.ORDER_MAPPER;
 import static com.br.productservice.mapper.ProductMapper.PRODUCT_MAPPER;
@@ -100,7 +97,9 @@ public class OrderServiceImpl implements OrderService {
         List<UUID> productsIds = orderDTO.getProducts().stream().map(ProductDTO::getId).toList();
 
         List<ProductEntity> products = productService.findAllByIds(productsIds).stream().map(PRODUCT_MAPPER::dtoToEntity).toList();
-        orderEntity.getProducts().addAll(products);
+        List<ProductEntity> productsEntity = new ArrayList<>(orderEntity.getProducts());
+        productsEntity.addAll(products);
+        orderEntity.setProducts(productsEntity);
     }
 
     private void updateTotalPrice(OrderEntity orderEntity, List<ProductEntity> products) {

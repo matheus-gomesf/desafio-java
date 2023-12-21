@@ -21,7 +21,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductDTOServiceImplTest {
@@ -146,6 +146,8 @@ public class ProductDTOServiceImplTest {
         when(productRepository.findById(productEntityBebida.getId())).thenReturn(Optional.of(productEntityBebida));
 
         productService.deleteProducts(productEntityBebida.getId());
+
+        verify(productRepository, times(1)).deleteById(productEntityBebida.getId());
     }
 
     @Test

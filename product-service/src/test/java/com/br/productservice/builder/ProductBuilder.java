@@ -43,4 +43,13 @@ public class ProductBuilder {
                 .category(ProductCategory.SOBREMESA)
                 .build();
     }
+
+    public static ProductDTO getOneDTOIdsSobremesa() {
+        return ProductDTO.builder()
+                .id(ID)
+                .name("Pudim")
+                .price(BigInteger.TEN)
+                .category(ProductCategory.SOBREMESA)
+                .build();
+    }
 }

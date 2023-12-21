@@ -7,9 +7,7 @@ import java.math.BigInteger;
 import java.util.UUID;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 @Builder
 public class ProductDTO {
     private UUID id;
