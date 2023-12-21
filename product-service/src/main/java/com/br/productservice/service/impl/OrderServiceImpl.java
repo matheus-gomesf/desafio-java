@@ -32,17 +32,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
-        val toSave = ORDER_MAPPER.dtoToEntity(orderDTO);
+        OrderEntity toSave = ORDER_MAPPER.dtoToEntity(orderDTO);
         toSave.getProducts().clear();
 
-        List<UUID> productsIds = orderDTO.getProducts().stream().map(ProductDTO::getId).toList();
+        putOrderProducts(orderDTO, toSave);
 
-        List<ProductEntity> products = productService.findAllByIds(productsIds).stream().map(PRODUCT_MAPPER::dtoToEntity).toList();
-
-        Optional<BigInteger> totalPrice = products.stream().map(ProductEntity::getPrice).reduce(BigInteger::add);
-
-        toSave.getProducts().addAll(products);
-        toSave.setTotalPrice(totalPrice.get());
+        updateTotalPrice(toSave, toSave.getProducts());
 
         val saved = orderRepository.save(toSave);
 
@@ -54,10 +49,13 @@ public class OrderServiceImpl implements OrderService {
 
         validateOrderId(orderId);
 
-        OrderEntity productEntity = getOrder(orderId);
+        OrderEntity orderEntity = getOrder(orderId);
 
-        ORDER_MAPPER.updateFromDto(orderDTO, productEntity);
-        OrderEntity saved = orderRepository.save(productEntity);
+        putOrderProducts(orderDTO, orderEntity);
+
+        updateTotalPrice(orderEntity, orderEntity.getProducts());
+
+        OrderEntity saved = orderRepository.save(orderEntity);
 
         return ORDER_MAPPER.entityToDto(saved);
     }
@@ -97,4 +95,17 @@ public class OrderServiceImpl implements OrderService {
             throw new ParameterNotValidException("OrderId", "null");
         }
     }
+
+    private void putOrderProducts(OrderDTO orderDTO, OrderEntity orderEntity) {
+        List<UUID> productsIds = orderDTO.getProducts().stream().map(ProductDTO::getId).toList();
+
+        List<ProductEntity> products = productService.findAllByIds(productsIds).stream().map(PRODUCT_MAPPER::dtoToEntity).toList();
+        orderEntity.getProducts().addAll(products);
+    }
+
+    private void updateTotalPrice(OrderEntity orderEntity, List<ProductEntity> products) {
+        Optional<BigInteger> totalPrice = products.stream().map(ProductEntity::getPrice).reduce(BigInteger::add);
+        totalPrice.ifPresent(orderEntity::setTotalPrice);
+    }
+
 }
