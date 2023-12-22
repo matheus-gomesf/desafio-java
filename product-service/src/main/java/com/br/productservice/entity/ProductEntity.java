@@ -24,6 +24,6 @@ public class ProductEntity {
 
     private BigInteger price;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ProductCategory category;
 }
