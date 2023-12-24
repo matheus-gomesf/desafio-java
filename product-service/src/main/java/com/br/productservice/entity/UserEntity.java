@@ -37,10 +37,8 @@ public class UserEntity implements UserDetails {
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = true)
+    @Column(name = "updated_at")
     private Date updatedAt;
-
-    
 
     public UserEntity(String email, String password, UserRole userRole) {
         this.email = email;
@@ -51,7 +49,7 @@ public class UserEntity implements UserDetails {
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.userRole == userRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.userRole == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
     @Override
