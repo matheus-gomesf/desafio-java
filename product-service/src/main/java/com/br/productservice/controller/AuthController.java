@@ -1,6 +1,6 @@
 package com.br.productservice.controller;
 
-import com.br.productservice.dto.AuthetinticationDto;
+import com.br.productservice.dto.AuthenticationDto;
 import com.br.productservice.dto.RegisterDto;
 import com.br.productservice.service.AuthorizationService;
 import jakarta.validation.Valid;
@@ -20,13 +20,13 @@ public class AuthController {
     private final AuthorizationService authorizationService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Valid AuthetinticationDto authetinticationDto){
-        return authorizationService.login(authetinticationDto);
+    public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDto authenticationDto){
+        return authorizationService.login(authenticationDto);
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register (@RequestBody RegisterDto registerDto){
+    public ResponseEntity<Object> register (@RequestBody @Valid RegisterDto registerDto){
         return authorizationService.register(registerDto);
     }
 }

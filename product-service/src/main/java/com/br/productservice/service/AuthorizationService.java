@@ -1,6 +1,6 @@
 package com.br.productservice.service;
 
-import com.br.productservice.dto.AuthetinticationDto;
+import com.br.productservice.dto.AuthenticationDto;
 import com.br.productservice.dto.LoginResponseDto;
 import com.br.productservice.dto.RegisterDto;
 import com.br.productservice.entity.UserEntity;
@@ -38,7 +38,7 @@ public class AuthorizationService implements UserDetailsService{
         return userRepository.findByEmail(email);
     } 
 
-    public ResponseEntity<Object> login(@RequestBody @Valid AuthetinticationDto data){
+    public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDto data){
         authenticationManager = context.getBean(AuthenticationManager.class);
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
