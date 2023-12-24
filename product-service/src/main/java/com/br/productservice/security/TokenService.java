@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.br.productservice.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,7 +15,8 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    private final String secret = "segredinho";
+    @Value("${api.token.secret}")
+    private String secret;
 
     public String generateToken(UserEntity userModel){
         try {
