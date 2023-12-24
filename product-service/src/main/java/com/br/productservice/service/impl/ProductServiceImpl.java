@@ -8,6 +8,8 @@ import com.br.productservice.repository.ProductRepository;
 import com.br.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,8 +47,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> listProducts() {
-        return productRepository.findAll().stream().map(PRODUCT_MAPPER::entityToDto).toList();
+    public Page<ProductDTO> listProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(PRODUCT_MAPPER::entityToDto);
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.br.productservice.service.OrderService;
 import com.br.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -58,8 +60,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> listOrders() {
-        return orderRepository.findAll().stream().map(ORDER_MAPPER::entityToDto).toList();
+    public Page<OrderDTO> listOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable).map(ORDER_MAPPER::entityToDto);
     }
 
     @Override

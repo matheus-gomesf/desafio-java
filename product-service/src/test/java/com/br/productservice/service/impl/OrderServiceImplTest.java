@@ -14,9 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -100,15 +102,15 @@ class OrderServiceImplTest {
 
     @Test
     void successfullyListProduct() {
+        Pageable pageable = Pageable.ofSize(20);
+        when(orderRepository.findAll(pageable)).thenReturn(new PageImpl<>(Collections.singletonList(orderEntity)));
 
-        when(orderRepository.findAll()).thenReturn(Collections.singletonList(orderEntity));
-
-        List<OrderDTO> listOrders = orderService.listOrders();
+        Page<OrderDTO> listOrders = orderService.listOrders(Pageable.ofSize(20));
 
         assertNotNull(listOrders);
-        assertNotNull(listOrders.stream().findFirst());
-        assertTrue(listOrders.stream().findFirst().isPresent());
-        assertNotNull(listOrders.stream().findFirst().get());
+        assertNotNull(listOrders.getContent().stream().findFirst());
+        assertTrue(listOrders.getContent().stream().findFirst().isPresent());
+        assertNotNull(listOrders.getContent().stream().findFirst().get());
         assertEquals(orderEntity.getId(), listOrders.stream().findFirst().get().getId());
     }
 

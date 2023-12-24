@@ -3,11 +3,12 @@ package com.br.productservice.controller;
 import com.br.productservice.dto.ProductDTO;
 import com.br.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,8 +31,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> list(){
-        List<ProductDTO> listProducts = productService.listProducts();
+    public ResponseEntity<Page<ProductDTO>> list(Pageable pageable){
+        Page<ProductDTO> listProducts = productService.listProducts(pageable);
         return new ResponseEntity<>(listProducts, HttpStatus.OK);
     }
 

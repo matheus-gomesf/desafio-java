@@ -12,9 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -94,10 +96,11 @@ public class ProductDTOServiceImplTest {
 
     @Test
     void successfullyListProduct() {
+        Pageable pageable = Pageable.ofSize(20);
 
-        when(productRepository.findAll()).thenReturn(Collections.singletonList(productEntityBebida));
+        when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(Collections.singletonList(productEntityBebida)));
 
-        List<ProductDTO> productCreated = productService.listProducts();
+        Page<ProductDTO> productCreated = productService.listProducts(pageable);
 
         assertNotNull(productCreated);
         assertNotNull(productCreated.stream().findFirst());
