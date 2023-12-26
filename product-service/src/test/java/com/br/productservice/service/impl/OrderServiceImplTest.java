@@ -6,6 +6,7 @@ import com.br.productservice.dto.OrderDTO;
 import com.br.productservice.entity.OrderEntity;
 import com.br.productservice.exception.ParameterNotValidException;
 import com.br.productservice.exception.ResourceNotFoundException;
+import com.br.productservice.publisher.OrderProducer;
 import com.br.productservice.repository.OrderRepository;
 import com.br.productservice.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ class OrderServiceImplTest {
 
     @Mock
     private ProductService productService;
+
+    @Mock
+    private OrderProducer orderProducer;
 
     private OrderDTO orderDTO;
 
