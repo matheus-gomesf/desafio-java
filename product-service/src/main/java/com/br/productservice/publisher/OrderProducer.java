@@ -18,6 +18,6 @@ public class OrderProducer {
     private final RabbitTemplate rabbitTemplate;
 
     public void orderCreated(OrderDTO orderDTO) {
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, orderDTO);
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, orderDTO.toString());
     }
 }

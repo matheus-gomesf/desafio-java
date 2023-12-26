@@ -6,6 +6,7 @@ import com.br.productservice.entity.OrderEntity;
 import com.br.productservice.entity.ProductEntity;
 import com.br.productservice.exception.ParameterNotValidException;
 import com.br.productservice.exception.ResourceNotFoundException;
+import com.br.productservice.publisher.OrderProducer;
 import com.br.productservice.repository.OrderRepository;
 import com.br.productservice.service.OrderService;
 import com.br.productservice.service.ProductService;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
+    private final OrderProducer orderProducer;
 
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
@@ -40,7 +42,11 @@ public class OrderServiceImpl implements OrderService {
 
         val saved = orderRepository.save(toSave);
 
-        return ORDER_MAPPER.entityToDto(saved);
+        OrderDTO savedDTO = ORDER_MAPPER.entityToDto(saved);
+
+        orderProducer.orderCreated(savedDTO);
+
+        return savedDTO;
     }
 
     @Override
@@ -56,7 +62,11 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity saved = orderRepository.save(orderEntity);
 
-        return ORDER_MAPPER.entityToDto(saved);
+        OrderDTO savedDTO = ORDER_MAPPER.entityToDto(saved);
+
+        orderProducer.orderCreated(savedDTO);
+
+        return savedDTO;
     }
 
     @Override

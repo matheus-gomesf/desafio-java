@@ -1,6 +1,8 @@
 package com.br.productservice.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -15,4 +17,13 @@ public class OrderDTO {
     private List<ProductDTO> products;
 
     private BigInteger totalPrice;
+
+    @Override
+    public String toString() {
+        return "OrderDTO{" +
+                "id=" + id +
+                ", products=" + products +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
