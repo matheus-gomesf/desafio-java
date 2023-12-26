@@ -1,15 +1,13 @@
 package com.br.productservice.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
-@Getter
+@Data
 @Builder
 public class OrderDTO {
     private UUID id;
@@ -17,13 +15,4 @@ public class OrderDTO {
     private List<ProductDTO> products;
 
     private BigInteger totalPrice;
-
-    @Override
-    public String toString() {
-        return "OrderDTO{" +
-                "id=" + id +
-                ", products=" + products +
-                ", totalPrice=" + totalPrice +
-                '}';
-    }
 }
