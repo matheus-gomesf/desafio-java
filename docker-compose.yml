@@ -11,6 +11,28 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  mysqldb:
+    image: mysql
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: desafio_java
+    ports:
+      - "3306:3306"
+
+  desafio-java:
+    container_name: desafio-java
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+      - rabbitmq
+    restart: on-failure
+
+
 networks:
   default:
     driver: bridge
