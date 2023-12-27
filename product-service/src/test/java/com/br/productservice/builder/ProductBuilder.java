@@ -52,4 +52,13 @@ public class ProductBuilder {
                 .category(ProductCategory.SOBREMESA)
                 .build();
     }
+
+    public static ProductDTO getOneDTOBrigadeiro() {
+        return ProductDTO.builder()
+                .id(UUID.fromString("22c2638c-c59e-4b1b-a450-db4c8a7c6a2b"))
+                .name("Brigadeiro")
+                .price(BigInteger.valueOf(200))
+                .category(ProductCategory.SOBREMESA)
+                .build();
+    }
 }

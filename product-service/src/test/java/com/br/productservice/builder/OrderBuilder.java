@@ -18,6 +18,12 @@ public class OrderBuilder {
                 .build();
     }
 
+    public static OrderDTO getOneWithValidProducts() {
+        return OrderDTO.builder()
+                .products(Collections.singletonList(ProductBuilder.getOneDTOBrigadeiro()))
+                .build();
+    }
+
     public static OrderEntity getOneEntity() {
         return OrderEntity.builder()
                 .id(ID)
